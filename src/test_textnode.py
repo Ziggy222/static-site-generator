@@ -33,6 +33,21 @@ class TestTextNode(unittest.TestCase):
         node2 = TextNode("Text B", TextType.BOLD, "https://b.com")
         self.assertNotEqual(node, node2)
 
+    def test_repr_plain_text(self):
+        node = TextNode("Hello, World!", TextType.PLAIN)
+        expected = "TextNode(Hello, World!, 1, None)"
+        self.assertEqual(repr(node), expected)
+
+    def test_repr_bold_text(self):
+        node = TextNode("Bold Text", TextType.BOLD)
+        expected = "TextNode(Bold Text, 2, None)"
+        self.assertEqual(repr(node), expected)
+
+    def test_repr_with_url(self):
+        node = TextNode("Link Text", TextType.LINK, "https://example.com")
+        expected = "TextNode(Link Text, 5, https://example.com)"
+        self.assertEqual(repr(node), expected)
+
 
 if __name__ == "__main__":
     unittest.main()
