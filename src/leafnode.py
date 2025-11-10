@@ -1,10 +1,21 @@
 from htmlnode import HTMLNode
 
 class LeafNode(HTMLNode):
+    """Represents an HTML leaf node (no children).
+
+    Leaf nodes have a `tag` and `value` and may have `props`. They must not
+    contain children.
+    """
     def __init__(self, tag, value, props=None):
         super().__init__(tag=tag, value=value, children=None, props=props)
 
     def to_html(self):
+        """Render the leaf node to HTML.
+
+        Enforces that the node has no children and that it has a value.
+        Supports a small set of tags (currently 'p' and 'a'). If `tag` is
+        None the method returns the raw `value` (plain text).
+        """
         # LeafNode must not have children (we only support leaf nodes here)
         if self.children:
             raise ValueError("LeafNode must not have children")

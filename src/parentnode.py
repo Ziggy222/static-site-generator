@@ -1,12 +1,24 @@
 # All non-Leaf nodes must be ParentNodes.
 from htmlnode import HTMLNode
+
 class ParentNode(HTMLNode):
+    """Represents a non-leaf HTML node that contains children.
+
+    ParentNode instances must have a `tag` and a non-empty `children` list.
+    Children are expected to implement `to_html()`.
+    """
     # Initialize ParentNode with tag, children and optional props
     # It cannot take a value
     def __init__(self, tag, children, props=None):
         super().__init__(tag=tag, children=children, props=props)
-    
+
     def to_html(self):
+        """Render the parent node and its children to an HTML string.
+
+        Validates that `tag` and `children` are present, converts each child
+        by calling its `to_html()` method, concatenates the results, and
+        returns the wrapped HTML string.
+        """
         # ParentNode must have a tag
         if self.tag is None:
             raise ValueError("ParentNode must have a tag to convert to HTML.")
