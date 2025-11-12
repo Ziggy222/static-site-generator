@@ -261,3 +261,31 @@ def text_to_textnode(text):
     
     return nodes
 
+def markdown_to_blocks(markdown):
+    """Convert a raw Markdown string into a list of block strings.
+
+    This function takes a raw Markdown document and splits it into blocks
+    separated by double newlines (\n\n). Each block is stripped of leading
+    and trailing whitespace. Any empty blocks resulting from excess newlines
+    are filtered out and not included in the return value.
+
+    Args:
+        markdown: A raw markdown string representing a full document.
+
+    Returns:
+        A list of block strings, with each block separated by double newlines
+        and whitespace-stripped. Empty blocks are excluded.
+        
+    Example:
+        markdown = "Block 1\\n\\nBlock 2\\n\\n\\n\\nBlock 3"
+        result = markdown_to_blocks(markdown)
+        # Returns: ["Block 1", "Block 2", "Block 3"]
+    """
+    blocks = []
+    final_blocks = []
+    blocks = markdown.split("\n\n")
+    for block in blocks:
+        block = block.strip()
+        if len(block) > 0:
+            final_blocks.append(block)
+    return final_blocks
