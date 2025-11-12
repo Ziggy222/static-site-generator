@@ -47,6 +47,55 @@ class TestParentNode(unittest.TestCase):
         with self.assertRaises(ValueError):
             ParentNode(None, [LeafNode("p", "x")]).to_html()
 
+    def test_to_html_with_single_child(self):
+        child = LeafNode("p", "only child")
+        node = ParentNode("div", [child])
+        expected = "<div><p>only child</p></div>"
+        self.assertEqual(node.to_html(), expected)
+
+    def test_to_html_with_three_children(self):
+        c1 = LeafNode("p", "first")
+        c2 = LeafNode("p", "second")
+        c3 = LeafNode("p", "third")
+        node = ParentNode("section", [c1, c2, c3])
+        expected = "<section><p>first</p><p>second</p><p>third</p></section>"
+        self.assertEqual(node.to_html(), expected)
+
+    def test_to_html_deeply_nested(self):
+        inner = LeafNode("p", "deep")
+        level2 = ParentNode("div", [inner])
+        level1 = ParentNode("section", [level2])
+        expected = "<section><div><p>deep</p></div></section>"
+        self.assertEqual(level1.to_html(), expected)
+
+    def test_to_html_tag_case_insensitive(self):
+        child = LeafNode("p", "test")
+        node1 = ParentNode("DIV", [child])
+        node2 = ParentNode("div", [child])
+        self.assertEqual(node1.to_html(), node2.to_html())
+
+    def test_to_html_mixed_children_types(self):
+        leaf = LeafNode("p", "paragraph")
+        inner_leaf = LeafNode("a", "link", props={"href": "/"})
+        nested = ParentNode("span", [inner_leaf])
+        node = ParentNode("div", [leaf, nested])
+        expected = '<div><p>paragraph</p><span><a href="/">link</a></span></div>'
+        self.assertEqual(node.to_html(), expected)
+
+    def test_to_html_with_empty_props_dict(self):
+        child = LeafNode("p", "test")
+        node = ParentNode("div", [child], props={})
+        expected = "<div><p>test</p></div>"
+        self.assertEqual(node.to_html(), expected)
+
+    def test_to_html_with_multiple_props(self):
+        child = LeafNode("p", "test")
+        node = ParentNode("div", [child], props={"class": "container", "id": "main"})
+        result = node.to_html()
+        self.assertIn('class="container"', result)
+        self.assertIn('id="main"', result)
+        self.assertIn("<div", result)
+
 
 if __name__ == "__main__":
     unittest.main()

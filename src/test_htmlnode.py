@@ -70,3 +70,45 @@ class TestHtmlNode(unittest.TestCase):
         expected = f"HTMLNode(tag=div, value=parent, children=[{repr(child)}], props={{'class': 'container'}})"
         self.assertEqual(repr(node), expected)
 
+    def test_eq_empty_value(self):
+        node1 = HTMLNode("p", "")
+        node2 = HTMLNode("p", "")
+        self.assertEqual(node1, node2)
+
+    def test_neq_empty_vs_none_value(self):
+        node1 = HTMLNode("p", "")
+        node2 = HTMLNode("p", None)
+        self.assertNotEqual(node1, node2)
+
+    def test_eq_with_multiple_children(self):
+        c1 = HTMLNode("span", "child1")
+        c2 = HTMLNode("span", "child2")
+        c3 = HTMLNode("span", "child3")
+        node1 = HTMLNode("div", children=[c1, c2, c3])
+        node2 = HTMLNode("div", children=[c1, c2, c3])
+        self.assertEqual(node1, node2)
+
+    def test_neq_different_number_of_children(self):
+        c1 = HTMLNode("span", "child1")
+        c2 = HTMLNode("span", "child2")
+        node1 = HTMLNode("div", children=[c1, c2])
+        node2 = HTMLNode("div", children=[c1])
+        self.assertNotEqual(node1, node2)
+
+    def test_eq_with_special_chars_in_value(self):
+        node1 = HTMLNode("p", 'text with "quotes" & <brackets>')
+        node2 = HTMLNode("p", 'text with "quotes" & <brackets>')
+        self.assertEqual(node1, node2)
+
+    def test_eq_with_special_chars_in_props(self):
+        props = {"data-value": "test & <special>"}
+        node1 = HTMLNode("div", props=props)
+        node2 = HTMLNode("div", props=props)
+        self.assertEqual(node1, node2)
+
+    def test_repr_with_special_chars(self):
+        node = HTMLNode("p", 'text with "quotes"')
+        result = repr(node)
+        self.assertIn('text with', result)
+
+
