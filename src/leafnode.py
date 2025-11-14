@@ -36,10 +36,16 @@ class LeafNode(HTMLNode):
         if self.value is None:
             raise ValueError("LeafNode must have a value to convert to HTML.")
 
-        # Support p and a tags
+        # Support p, a and b tags
         if tag_lower == "p":
             return f"<p{props_html}>{self.value}</p>"
         if tag_lower == "a":
             return f"<a{props_html}>{self.value}</a>"
+        if tag_lower == "b":
+            return f"<b{props_html}>{self.value}</b>"
+        if tag_lower == "i":
+            return f"<i{props_html}>{self.value}</i>"
+        if tag_lower == "code":
+            return f"<code{props_html}>{self.value}</code>"
 
         raise NotImplementedError(f"LeafNode.to_html not implemented for tag: {self.tag}")

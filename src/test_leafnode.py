@@ -60,13 +60,13 @@ class TestLeafNode(unittest.TestCase):
 
     def test_to_html_raises_on_unsupported_b_tag(self):
         node = LeafNode("b", "bold")
-        with self.assertRaises(NotImplementedError):
-            node.to_html()
+        expected = "<b>bold</b>"
+        self.assertEqual(node.to_html(), expected)
 
     def test_to_html_raises_on_unsupported_code_tag(self):
         node = LeafNode("code", "print('hello')")
-        with self.assertRaises(NotImplementedError):
-            node.to_html()
+        expected = "<code>print('hello')</code>"
+        self.assertEqual(node.to_html(), expected)
 
     def test_to_html_with_url_special_chars(self):
         node = LeafNode("a", "Link", props={"href": "https://example.com?foo=bar&baz=qux"})
