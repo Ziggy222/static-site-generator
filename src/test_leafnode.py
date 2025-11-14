@@ -54,8 +54,9 @@ class TestLeafNode(unittest.TestCase):
 
     def test_to_html_raises_on_unsupported_tag(self):
         node = LeafNode("img", "image")
-        with self.assertRaises(NotImplementedError):
-            node.to_html()
+        # img is rendered as a self-closing tag; value is ignored
+        expected = "<img />"
+        self.assertEqual(node.to_html(), expected)
 
     def test_to_html_raises_on_unsupported_b_tag(self):
         node = LeafNode("b", "bold")
