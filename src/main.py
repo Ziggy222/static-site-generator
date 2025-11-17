@@ -45,9 +45,9 @@ def main():
     base_path = sys.argv[1] if len(sys.argv) > 1 else "/"
 
     # Clear and copy static files, then generate the index page
-    copy_source_to_destination("static", "public")
+    copy_source_to_destination("static", "docs")
     # Generate `public/index.html` from `content/index.md` using `template.html`
-    generate_pages_recursive("content", "template.html", "public", base_path)
+    generate_pages_recursive("content", "template.html", "docs", base_path)
 
 def copy_source_to_destination(source_directory, destination_directory):
     """Recursively Copy all files from source_directory to destination_directory.
