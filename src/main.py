@@ -43,7 +43,7 @@ def main():
     # Clear and copy static files, then generate the index page
     copy_source_to_destination("static", "public")
     # Generate `public/index.html` from `content/index.md` using `template.html`
-    generate_page("content/index.md", "template.html", "public/index.html")
+    generate_pages_recursive("content", "template.html", "public")
 
 def copy_source_to_destination(source_directory, destination_directory):
     """Recursively Copy all files from source_directory to destination_directory.
@@ -111,6 +111,28 @@ def generate_page(from_path, template_path, dest_path):
     # Write output
     with open(dest_path, "w", encoding="utf-8") as f:
         f.write(output)
+
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+    """Generate HTML pages for all markdown files in a directory recursively.
+
+    Args:
+        dir_path_content: Path to the content directory containing markdown files.
+        template_path: Path to the HTML template file.
+        dest_dir_path: Path to the destination directory for generated HTML files.
+    """
+    import os
+
+    for root, dirs, files in os.walk(dir_path_content):
+        for file in files:
+            if file.endswith(".md"):
+                md_path = os.path.join(root, file)
+                # Determine relative path to maintain directory structure
+                rel_path = os.path.relpath(md_path, dir_path_content)
+                html_file_name = os.path.splitext(rel_path)[0] + ".html"
+                dest_path = os.path.join(dest_dir_path, html_file_name)
+
+                # Generate the page
+                generate_page(md_path, template_path, dest_path)
 
 
 if __name__ == "__main__":
