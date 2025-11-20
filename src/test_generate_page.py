@@ -25,8 +25,8 @@ class TestGeneratePage(unittest.TestCase):
             if os.path.exists(os.path.dirname(out_path)):
                 os.rmdir(os.path.dirname(out_path))
 
-            # Run generate_page
-            generate_page(md_path, tpl_path, out_path)
+            # Run generate_page (provide base_path '/')
+            generate_page(md_path, tpl_path, out_path, '/')
 
             # Assertions
             self.assertTrue(os.path.exists(out_path), "Output file was not created")

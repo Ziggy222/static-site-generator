@@ -106,8 +106,19 @@ def generate_page(from_path, template_path, dest_path, base_path):
     output = template.replace("{{ Title }}", title)
     output = output.replace("{{ Content }}", content_html)
 
-    output = output.replace('href="/', f'href="{base_path}')
-    output = output.replace('src="/', f'src="{base_path}')
+    # Normalize base_path to ensure it ends with a single slash (but keep "/" as-is)
+    if not base_path:
+        normalized_base = "/"
+    else:
+        normalized_base = base_path if base_path.endswith("/") else base_path + "/"
+
+    # Replace absolute-rooted href/src paths in the generated output so that
+    # links and images reference the configured base path. Handle both
+    # double-quoted and single-quoted attributes.
+    output = output.replace('href="/', f'href="{normalized_base}')
+    output = output.replace("href='/", f"href='{normalized_base}")
+    output = output.replace('src="/', f'src="{normalized_base}')
+    output = output.replace("src='/", f"src='{normalized_base}")
 
     # Ensure destination directory exists
     dest_dir = os.path.dirname(dest_path)
